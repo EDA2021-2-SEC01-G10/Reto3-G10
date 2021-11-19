@@ -62,6 +62,10 @@ def casosPorArea(catalog,longitudMin,longitudMax,latitudMin,latitudMax):
     listR=controller.casosPorArea(catalog,longitudMin,longitudMax,latitudMin,latitudMax)
     return listR    
 
+def sight_by_duration(catalog,duraMin,duraMax):
+    return controller.sight_by_durationc(catalog,duraMin,duraMax)
+
+
 catalog = None
 
 """
@@ -111,7 +115,34 @@ while True:
 
          
     elif int(inputs[0]) == 3:
-         pass
+
+
+        horaMin = input("Ingrese el tiempo minimo (en formato HH:MM:SS) para la busqueda en formato:\n ")
+        horaMax = input("Ingrese el tiempo maximo (en formato HH:MM:SS) para la busqueda en formato:\n ")
+
+        sights = sight_by_duration(catalog,horaMin,horaMax)
+        
+        print("\nLa mayor duracion registrada es de "+str(sights[0])+" segundos con "+str(sights[1])+" avistamiento(s)")
+        print("\nLos avistamientos totales ocurridos entre " + horaMin + " y " + horaMax + " son " + str(lt.size(sights[2])))
+        if lt.size(sights[2])>=6:
+            
+            print("\nLos tres avistamientos más recientes y los tres avistamientos más antiguos registrados en este intervalo de tiempo son: ")
+
+            x = lt.size(sights[2]) - 2
+            y = True
+            z = 1
+
+            while y:
+                if z != 4:
+                    AS = lt.getElement(sights[2], z)
+                    z += 1
+                else: 
+                    AS = lt.getElement(sights[2], x)
+                    x += 1
+                    if x == lt.size(sights[2])+1:
+                        y = False
+                print ("Fecha:"+ AS["datetime"]+ "|Ciudad: "+ AS["city"]+ "|Forma: "+ AS["shape"]+ "|Duracion: "+ AS["duration (seconds)"]+ "|Comentario: "+ AS["comments"])
+                
 
     elif int(inputs[0]) == 4:
          rangoInferior=input("Ingrese la hora correspondiente al rango inferior que desea consultar, en formato HH:MM:SS   : ")
